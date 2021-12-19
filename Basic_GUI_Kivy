@@ -1,0 +1,86 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Dec 18 17:29:54 2021
+
+@author: AbhayKaushik
+"""
+import kivy
+from kivy.app import App
+from kivy.uix.label import Label
+from kivy.uix.button import Button
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.image import Image
+from kivy.config import Config
+
+
+Config.set('graphics', 'width', '960')
+Config.set('graphics', 'height', '540')
+Config.set('graphics', 'resizable', False)
+
+from kivy.core.window import Window 
+Window.clearcolor=(22/255,35/255,64/255,1)
+
+NonStopPopLogo = Image(source='Non Stop Pop Logo.png',pos=(290,115),size_hint=(0.4,0.4))
+RadioMirrorParkLogo = Image(source='Radio Mirror Park Logo.png',pos=(290,115),size_hint=(0.4,0.4))
+LosSantosRockRadioLogo = Image(source='Los Santos Rock Radio Logo.png',pos=(290,115),size_hint=(0.4,0.4))
+RebelRadioLogo = Image(source='Rebel Radio Logo.png',pos=(290,115),size_hint=(0.4,0.4))
+
+
+global Images
+Images = [NonStopPopLogo, RadioMirrorParkLogo,
+          LosSantosRockRadioLogo, RebelRadioLogo]
+global ClearLogo
+ClearLogo = Image(source='',pos=(225,120))
+global index
+index = 0
+global layout
+
+
+def leftStation(instance):
+    global index
+    global Images
+    layout.remove_widget(Images[index])
+    
+    index = index - 1
+    if index < 0:
+        index = len(Images)-1
+    #layout.add_widget(ClearLogo)
+    layout.add_widget(Images[index])
+    print(index)
+    
+def rightStation(instance):
+    global index
+    global Images
+    layout.remove_widget(Images[index])
+    
+    index = index + 1
+    if index > len(Images)-1:
+        index = 0
+    #layout.add_widget(ClearLogo)
+    layout.add_widget(Images[index])
+    print(index)
+
+class RadioWidget(App):
+    def build(self):
+        global layout
+        layout = FloatLayout() #background_color=(0.22,0.35,0.64,1))
+        
+        button1 = Button (text="", pos=(117,165),
+                          #background_color=(155/255,214/255,227/255,1),
+                          size_hint=(0.18,0.18), background_normal='LeftArrow.png',
+                          background_down='LeftArrowDown.png', border=(0,0,0,0))
+        button1.bind(on_press=leftStation)
+        
+        button2 = Button (text="", pos=(667,165),
+                          #background_color=(155/255,214/255,227/255,1),
+                          size_hint=(0.18,0.18), background_normal='RightArrow.png',
+                          background_down='RightArrowDown.png', border=(0,0,0,0))
+        button2.bind(on_press=rightStation)
+        
+        
+        layout.add_widget(button1)
+        layout.add_widget(button2)
+        
+        return layout
+    
+RadioWidget().run()
